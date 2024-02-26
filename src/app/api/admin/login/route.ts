@@ -2,6 +2,7 @@ import { NextResponse } from "next/server"
 import db from '@/lib/prisma'
 import { SignJWT } from 'jose'
 import { cookies } from "next/headers";
+import { SHA256 as sha256 } from "crypto-js";
 
 const secret = new TextEncoder().encode(process.env.JWT_KEY as string);
 const alg = "HS256";
@@ -26,7 +27,7 @@ export async function POST(request: Request) {
     const foundUser = await db.admin.findUnique({
       where: {
         email,
-        password,
+        password: sha256(password).toString(),
       }
     })
     if (!foundUser) {

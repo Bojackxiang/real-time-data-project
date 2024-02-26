@@ -5,6 +5,9 @@ import React, { useState } from 'react'
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { Architects_Daughter } from 'next/font/google';
+import { apiClient } from '@/lib/ali-client';
+import { ADMIN_API_ROUTES } from '@/utils/api-routes';
+import { useAppStore } from '@/store/store';
 
 const ArchitectsDaughter = Architects_Daughter({
   weight: "400", // if single weight, otherwise you use array like [400, 500, 700],
@@ -18,8 +21,18 @@ const AdminPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleLogin = () => {
-      
+  const { setUserInfo } = useAppStore();
+
+  const handleLogin = async () => {
+    const response = await apiClient.post(ADMIN_API_ROUTES.LOGIN, {
+      email,
+      password,
+    });
+    console.log(response.data)
+    if (response.data.userInfo) {
+      setUserInfo(response.data.userInfo);
+      router.push("/admin");
+    }
   };
 
   return (

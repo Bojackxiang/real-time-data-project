@@ -1,5 +1,6 @@
 "use client"
 
+import { ScrapingQueue } from '@/component/scrape-queue';
 import { ADMIN_API_ROUTES } from '@/utils/api-routes';
 import { Button, Card, CardBody, CardFooter, Input, Listbox, ListboxItem, Tab, Tabs } from '@nextui-org/react'
 import axios from 'axios';
@@ -32,6 +33,8 @@ const ScrapeDataPage = () => {
 
   return (
     <section className='m-10 grid grid-cols-3 gap-3'>
+      <ScrapingQueue />
+
       <Card className="col-span-2">
         <CardBody>
           <Tabs>
@@ -99,6 +102,10 @@ const ScrapeDataPage = () => {
           </Button>
         </CardFooter>
       </Card>
+
+      <div className="col-span-3">
+        {/* <CurrentlyScrapingTable jobs={jobs} /> */}
+      </div>
     </section>
   )
 }

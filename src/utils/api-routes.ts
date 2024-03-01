@@ -22,5 +22,5 @@ export const ADMIN_API_ROUTES = {
   DASHBOARD_SCRAPING_CHART_DATA: "/admin/dashboard/scraping-chart-data",
   DASHBOARD_METRICS: "/admin/dashboard/metrics",
   CREATE_JOB: "/admin/create-job",
-  JOB_DETAILS: "/admin/jobDetails",
+  JOB_DETAILS: "/admin/job-details",
 };

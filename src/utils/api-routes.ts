@@ -24,3 +24,5 @@ export const ADMIN_API_ROUTES = {
   CREATE_JOB: "/admin/create-job",
   JOB_DETAILS: "/admin/job-details",
 };
+
+export const API_PREFIX = "/api"

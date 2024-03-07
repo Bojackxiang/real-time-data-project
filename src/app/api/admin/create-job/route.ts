@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server"
 import db from '@/lib/prisma'
+import { importQueue } from "@/lib";
 
 export async function POST(request: Request) {
   try {
@@ -10,6 +11,12 @@ export async function POST(request: Request) {
         url,
         jobType
       }
+    })
+
+    const queueAddedResult = await importQueue.add("new-location", {
+      url,
+      jobType,
+      id: response.id
     })
 
     return NextResponse.json(

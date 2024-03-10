@@ -1,6 +1,7 @@
 // import { startLocationScraping } from "./scraping/locationScraping";
 // import puppeteer from 'puppeteer';
 import prisma from "./lib/prisma";
+// import { Worker } from 'bullmq'
 // import { startPackageScraping } from "./scraping/packageScraping";
 // import { startFlightScraping } from "./scraping/flightsScraping";
 // import { startHotelScraping } from "./scraping/hotelScraping";
@@ -16,24 +17,34 @@ export const register = async () => {
       const { connection } = await import("./lib");
       const { importQueue } = await import("./lib");
 
-
+      // handle new added task 
       new Worker(
-        "jobQueue",
+        "importQueue",
         async (job: any) => {
+          console.log("new job", job.data)
           let browser = null;
           try {
-            browser = await puppeteer.connect({
-              browserWSEndpoint: "wss://brd-customer-hl_6d21b639-zone-arklyte:ws0efsojv3sd@brd.superproxy.io:9222"
-            })
+            browser = await puppeteer.launch({
+              headless: "new"
+            });
             const page = await browser.newPage();
+            await page.goto('https://developer.chrome.com/');
+
+            if (job.data.jobType.type === 'location') {
+
+              await prisma.jobs.update({
+                where: { id: job.data.id },
+                data: { isComplete: true, status: "complete" },
+              });
+            }
+
+
           } catch (error: any) {
-            console.error("Error: puppeteer.connect", error.message)
+            console.error("Error - puppeteer.connect: ", error.message)
           } finally {
-            // await browser?.close()
+            await browser?.close()
             console.log("Borwer has been closed. ")
           }
-
-
         },
         {
           connection,
